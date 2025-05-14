@@ -15,6 +15,6 @@ for message in consumer:
     print("The timestamp is : {0}".format(type(message.timestamp)))
     print("The leader_epoch is : {0}".format(message.leader_epoch))
     tp=TopicPartition(message.topic,message.partition)
-    om = OffsetAndMetadata(message.offset+1, message.timestamp)
+    om = OffsetAndMetadata(message.offset + 1, None)
     consumer.commit({tp:om})
     print('*' * 100)
