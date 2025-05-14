@@ -13,6 +13,7 @@ for message in consumer:
     print("The partition is : {0}".format(message.partition))
     print("The offset is : {0}".format(message.offset))
     print("The timestamp is : {0}".format(message.timestamp))
+    print("The timestamp is : {0}".format(message.leader_epoch))
     tp=TopicPartition(message.topic,message.partition)
     om = OffsetAndMetadata(message.offset+1, message.timestamp)
     consumer.commit({tp:om})
