@@ -1,0 +1,138 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "MSK Cluster with all properties",
+	"Parameters": {
+		"Environment": {
+			"Type": "String",
+			"Description": "Name of Environment",
+			"Default": "CDC-POC"
+		},
+		"PrivateSubnetOne": {
+			"Type": "String",
+			"Description": "Private Data Subnet",
+			"Default": "subnet-0812c8283a1834c3a"
+		},
+		"PrivateSubnetTwo": {
+			"Type": "String",
+			"Description": "Private Data Subnet",
+			"Default": "subnet-09a9aed90381afa0a"
+		},
+		"PrivateSubnetThree": {
+			"Type": "String",
+			"Description": "Private Data Subnet",
+			"Default": "subnet-0001f3e440bf28a54"
+		},
+		"InstanceType": {
+			"Type": "String",
+			"Description": "The instance type for the Kafka instance",
+			"Default": "kafka.m5.xlarge"
+		},
+		"SecurityGroup": {
+			"Type": "String",
+			"Description": "The DB security group",
+			"Default": "sg-031cac44b5284db04"
+		},
+		"ClusterName": {
+			"Type": "String",
+			"Description": "Kafka ClusterName",
+			"Default": "cassandra-cdc-kafka"
+		},
+		"ClusterVersion": {
+			"Type": "String",
+			"Description": "Kafka Cluster Version",
+			"Default": "2.7.2"
+		},
+		"Purpose": {
+			"Type": "String",
+			"Description": "Purpose of deployment",
+			"Default": "cdc-cassandra-cdc-kafka"
+		},
+		"ConfigurationARN": {
+			"Type": "String",
+			"Description": "ConfigurationARN for Kafka Cluster"
+
+		},
+		"KMSKeyARN": {
+			"Type": "String",
+			"Description": "KMS key ARN"
+
+		},
+		"RetentionInDays": {
+			"Type": "Number",
+			"Description": "RetentionInDays",
+			"Default": 7
+		},
+		"VolumeSize": {
+			"Type": "Number",
+			"Description": "VolumeSize of Kafka",
+			"Default": 100
+		},
+		"NumberofBrokers": {
+			"Type": "Number",
+			"Description": "NumberofBrokers",
+			"Default": 3
+		}
+	},
+    "Resources": {
+
+        "KafkaCluster": {
+            "Type": "AWS::MSK::Cluster",
+            "Properties": {
+                "ClusterName": {"Ref": "ClusterName"},
+                "KafkaVersion": {"Ref": "ClusterVersion"},
+                "NumberOfBrokerNodes": {"Ref": "NumberofBrokers"},
+                "EnhancedMonitoring": "PER_BROKER",
+				
+                "EncryptionInfo": {
+                    "EncryptionAtRest": {
+                        "DataVolumeKMSKeyId": {"Ref": "KMSKeyARN"}
+                    },
+                    "EncryptionInTransit": {
+                        "ClientBroker": "PLAINTEXT",
+                        "InCluster": false
+                    }
+                },
+                "ConfigurationInfo": {
+                    "Arn": {"Ref": "ConfigurationARN"},
+                    "Revision": 1
+                },
+                "Tags": {
+                    "Environment": {"Ref": "Environment"},
+                    "Owner" : "Abhishek",
+					"Purpose" : {"Ref": "Purpose"}
+                },
+                "BrokerNodeGroupInfo": {
+                    "BrokerAZDistribution": "DEFAULT",
+                    "InstanceType": {"Ref": "InstanceType"},
+                    "SecurityGroups": [
+                        {"Ref": "SecurityGroup"}
+                    ],
+                    "StorageInfo": {
+                        "EBSStorageInfo": {
+                            "VolumeSize": {"Ref": "VolumeSize"}
+                        }
+                    },
+                    "ClientSubnets": [
+                        {
+                            "Ref": "PrivateSubnetOne"
+                        },
+                        {
+                            "Ref": "PrivateSubnetTwo"
+                        },
+                        {
+                            "Ref": "PrivateSubnetThree"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+	"Outputs": {
+        "MSKCluster": {
+            "Description": "The Arn for the AppServices MSK cluster",
+            "Value": {
+                "Ref": "KafkaCluster"
+            }
+        }
+    }
+}

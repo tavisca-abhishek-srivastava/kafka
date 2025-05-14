@@ -1,0 +1,152 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "MSK Cluster with all properties",
+	"Parameters": {
+		"Environment": {
+			"Type": "String",
+			"Description": "Name of Environment"
+		},
+		"PrivateSubnetOne": {
+			"Type": "String",
+			"Description": "Private Data Subnet"
+		},
+		"PrivateSubnetTwo": {
+			"Type": "String",
+			"Description": "Private Data Subnet"
+		},
+		"PrivateSubnetThree": {
+			"Type": "String",
+			"Description": "Private Data Subnet"
+		},
+		"InstanceType": {
+			"Type": "String",
+			"Description": "The instance type for the Kafka instance",
+			"Default": "kafka.t3.small"
+		},
+		"SecurityGroup": {
+			"Type": "String",
+			"Description": "The DB security group"
+		},
+		"ClusterName": {
+			"Type": "String",
+			"Description": "Kafka ClusterName",
+			"Default": "app-service-kafka"
+		},
+		"ClusterVersion": {
+			"Type": "String",
+			"Description": "Kafka Cluster Version",
+			"Default": "2.2.1"
+		},
+		"Purpose": {
+			"Type": "String",
+			"Description": "Purpose of deployment",
+			"Default": "Business"
+		},
+		"ConfigurationARN": {
+			"Type": "String",
+			"Description": "ConfigurationARN for Kafka Cluster"
+
+		},
+		"KMSKeyARN": {
+			"Type": "String",
+			"Description": "KMS key ARN"
+
+		},
+		"LogGroupName": {
+			"Type": "String",
+			"Description": "LogGroupName"
+		},
+		"RetentionInDays": {
+			"Type": "Number",
+			"Description": "RetentionInDays",
+			"Default": 7
+		},
+		"VolumeSize": {
+			"Type": "Number",
+			"Description": "VolumeSize of Kafka",
+			"Default": 100
+		},
+		"NumberofBrokers": {
+			"Type": "Number",
+			"Description": "NumberofBrokers",
+			"Default": 3
+		}
+	},
+    "Resources": {
+		"KafkaLogGroup": {
+			"Type": "AWS::Logs::LogGroup",
+			"Properties": {
+				"LogGroupName" : {"Ref": "LogGroupName"},
+				"RetentionInDays": {"Ref": "RetentionInDays"}
+			}
+		},
+        "KafkaCluster": {
+            "Type": "AWS::MSK::Cluster",
+            "Properties": {
+                "ClusterName": {"Ref": "ClusterName"},
+                "KafkaVersion": {"Ref": "ClusterVersion"},
+                "NumberOfBrokerNodes": {"Ref": "NumberofBrokers"},
+                "EnhancedMonitoring": "PER_BROKER",
+				"LoggingInfo":{
+					"BrokerLogs": {
+						"CloudWatchLogs":{
+							"Enabled" : true,
+							"LogGroup" : {"Ref": "LogGroupName"}
+						  }
+						  
+					}
+				},
+                "EncryptionInfo": {
+                    "EncryptionAtRest": {
+                        "DataVolumeKMSKeyId": {"Ref": "KMSKeyARN"}
+                    },
+                    "EncryptionInTransit": {
+                        "ClientBroker": "TLS",
+                        "InCluster": true
+                    }
+                },
+                "ConfigurationInfo": {
+                    "Arn": {"Ref": "ConfigurationARN"},
+                    "Revision": 1
+                },
+                "Tags": {
+                    "Environment": {"Ref": "Environment"},
+                    "Owner" : "App-Services",
+					"Purpose" : {"Ref": "Purpose"}
+                },
+                "BrokerNodeGroupInfo": {
+                    "BrokerAZDistribution": "DEFAULT",
+                    "InstanceType": {"Ref": "InstanceType"},
+                    "SecurityGroups": [
+                        {"Ref": "SecurityGroup"}
+                    ],
+                    "StorageInfo": {
+                        "EBSStorageInfo": {
+                            "VolumeSize": {"Ref": "VolumeSize"}
+                        }
+                    },
+                    "ClientSubnets": [
+                        {
+                            "Ref": "PrivateSubnetOne"
+                        },
+                        {
+                            "Ref": "PrivateSubnetTwo"
+                        },
+                        {
+                            "Ref": "PrivateSubnetThree"
+                        }
+                    ]
+                }
+            },
+			"DependsOn": "KafkaLogGroup"
+        }
+    },
+	"Outputs": {
+        "MSKCluster": {
+            "Description": "The Arn for the AppServices MSK cluster",
+            "Value": {
+                "Ref": "KafkaCluster"
+            }
+        }
+    }
+}
