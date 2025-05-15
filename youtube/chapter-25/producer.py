@@ -12,8 +12,8 @@ producer = KafkaProducer(bootstrap_servers=['b-2.tfs3topg.3nd1ah.c1.kafka.us-eas
 
 for e in range(10000):
     data = {'number' : e}
-    key = ["key-0","key-1","key-2","key-3","key-4","key-5","key-6","key-7"]
-    i = randint(0,7)
+    key = ["key-0","key-1","key-2","key-3","key-4","key-5","key-6","key-7","key-8","key-9","key-10","key-11"]
+    i = randint(0,11)
     print(data)
     print(i)
     print(key[i])
