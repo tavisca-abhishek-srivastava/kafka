@@ -19,4 +19,4 @@ for message in consumer:
     tp=TopicPartition(message.topic,message.partition)
     om = OffsetAndMetadata(message.offset + 1, message.leader_epoch, number)
     consumer.commit({tp:om})
-    print('*' * 100)
+    print('*' * 101)

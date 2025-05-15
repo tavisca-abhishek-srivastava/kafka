@@ -12,11 +12,11 @@ producer = KafkaProducer(bootstrap_servers=['b-2.tfs3topg.3nd1ah.c1.kafka.us-eas
 
 for e in range(100):
     data = {'number' : e}
-    key = ["partition-1","partition-2"]
-    i = randint(0,1)
+    key = ["partition-0","partition-1","partition-2"]
+    i = randint(0,1,2)
     print(data)
     print(i)
     producer.send(topic_name, key=(key[i]).encode('utf-8') , value=data)
-    sleep(0.5)
+    sleep(1)
 producer.close()
 
