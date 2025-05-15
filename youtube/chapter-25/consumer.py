@@ -2,6 +2,7 @@ from kafka import KafkaConsumer
 from kafka import TopicPartition , OffsetAndMetadata
 import json
 from random import *
+from time import sleep
 
 consumer = KafkaConsumer ('hello_world1',bootstrap_servers = ['b-2.tfs3topg.3nd1ah.c1.kafka.us-east-1.amazonaws.com:9092'],
 value_deserializer=lambda m: json.loads(m.decode('utf-8')),group_id='demo112215sgtrjwrykvjh1',auto_offset_reset='earliest', enable_auto_commit =False)
@@ -20,3 +21,4 @@ for message in consumer:
     om = OffsetAndMetadata(message.offset + 1, message.leader_epoch, number)
     consumer.commit({tp:om})
     print('*' * 101)
+    sleep(1)
