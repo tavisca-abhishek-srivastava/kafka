@@ -5,7 +5,7 @@ from random import *
 from time import sleep
 
 consumer = KafkaConsumer ('hello_world1',bootstrap_servers = ['b-2.tfs3topg.3nd1ah.c1.kafka.us-east-1.amazonaws.com:9092'],
-value_deserializer=lambda m: json.loads(m.decode('utf-8')),group_id='demo112215sgtrjwrykvjh1',auto_offset_reset='earliest', enable_auto_commit =False)
+value_deserializer=lambda m: json.loads(m.decode('utf-8')),group_id='demo112215sgtrjwrykvjh1',auto_offset_reset='earliest', enable_auto_commit =False,partition_assignment_strategy=['RoundRobinPartitionAssignor'])
 
 for message in consumer:
     number = randint(-2147483648 , 2147483647)
