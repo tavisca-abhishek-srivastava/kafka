@@ -1,5 +1,5 @@
 from kafka import KafkaConsumer
-from kafka import TopicPartition , OffsetAndMetadata
+from kafka import TopicPartition , OffsetAndMetadata, ConsumerRebalanceListener
 import json
 from random import *
 from time import sleep
