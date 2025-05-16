@@ -6,6 +6,8 @@ from time import sleep
 from kafka.coordinator.assignors.roundrobin import RoundRobinPartitionAssignor
 from kafka.coordinator.assignors.range import RangePartitionAssignor
 
+topic_name=["consumerlagdemo"]
+
 class MyConsumerRebalanceListener(ConsumerRebalanceListener):
 
     def on_partitions_revoked(self, revoked):
@@ -22,7 +24,7 @@ consumer = KafkaConsumer(bootstrap_servers=['b-2.tfs3topg.3nd1ah.c1.kafka.us-eas
                          enable_auto_commit=False,partition_assignment_strategy=[RoundRobinPartitionAssignor])
 
 listener = MyConsumerRebalanceListener()
-consumer.subscribe('consumerlagdemo',listener=listener)
+consumer.subscribe(topic_name,listener=listener)
 
 for message in consumer:
     number = randint(-2147483648 , 2147483647)
