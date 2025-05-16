@@ -22,7 +22,7 @@ consumer = KafkaConsumer(bootstrap_servers=['b-2.tfs3topg.3nd1ah.c1.kafka.us-eas
                          enable_auto_commit=False,partition_assignment_strategy=[RoundRobinPartitionAssignor])
 
 listener = MyConsumerRebalanceListener()
-consumer.subscribe('hello_world',listener=listener)
+consumer.subscribe('partitionstrategy',listener=listener)
 
 for message in consumer:
     number = randint(-2147483648 , 2147483647)

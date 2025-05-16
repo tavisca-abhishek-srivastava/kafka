@@ -18,7 +18,7 @@ def custom_partitioner(key, all_partitions, available):
 
 
 producer = KafkaProducer(bootstrap_servers=['b-2.tfs3topg.3nd1ah.c1.kafka.us-east-1.amazonaws.com:9092'],value_serializer=lambda x: dumps(x).encode('utf-8'),partitioner=custom_partitioner)
-topic_name='hello_world'
+topic_name='partitionstrategy'
 
 for e in range(0,100):
     data={"number":e}
