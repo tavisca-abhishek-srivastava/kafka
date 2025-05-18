@@ -40,5 +40,8 @@ data1 = {
     'Age':47 }
 for e in range(0,1000):
     data={"number":e}
-    producer.send(topic_name, key=str(e).encode(),value=(data, schema))
+    record_metadata = producer.send(topic_name, key=str(e).encode(),value=(data1, schema))
+    print(record_metadata.topic)
+    print(record_metadata.partition)
+    print(record_metadata.offset)
     sleep(.4)
