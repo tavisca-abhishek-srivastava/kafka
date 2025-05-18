@@ -13,7 +13,10 @@ serializer = KafkaSerializer(schema_registry_client)
 producer = KafkaProducer(bootstrap_servers=['b-2.tfs3topg.3nd1ah.c1.kafka.us-east-1.amazonaws.com:9092'],value_serializer=serializer)
 with open('./user.avsc', 'r') as schema_file:
     schema = AvroSchema(schema_file.read())
-
+data = {
+    'name': 'Hello',
+    'Age':45
+}
 record_metadata =producer.send('glue_schema_bms', value=(data, schema)).get(timeout=10)
 print(record_metadata.topic)
 print(record_metadata.partition)
