@@ -31,6 +31,7 @@ for message in consumer:
     print(message)
     print("The value is : {}".format(message.value))
     tp=TopicPartition(message.topic,message.partition)
+    print(number)
     print(tp)
     om = OffsetAndMetadata(message.offset+1, message.leader_epoch, number)
     print(om)

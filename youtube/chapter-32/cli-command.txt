@@ -1,0 +1,21 @@
+schema definition:
+
+file name : user.avsc
+
+{
+  "namespace": "aws_schema_registry.integrationtests",
+  "type": "record",
+  "name": "User",
+  "fields": [
+    {"name": "name", "type": "string"},
+    {"name": "Age", "type": "int"},
+    {"name": "address", "type": "string"}
+  ]
+}
+
+
+Send message data along with schema
+data = {
+    'name': 'Hello',
+    'Age':45
+}
