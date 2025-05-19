@@ -28,6 +28,7 @@ for message in consumer:
     number = randint(-2147483648 , 2147483647)
     print(message)
     print("The value is : {}".format(message.value))
+    print("The key is : {}".format(message.key))
     tp=TopicPartition(message.topic,message.partition)
     om = OffsetAndMetadata(message.offset+1, message.leader_epoch, number)
     consumer.commit({tp:om})

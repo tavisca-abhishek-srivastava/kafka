@@ -40,5 +40,5 @@ topic_name='consumerlagdemo'
 for e in range(0,1000):
     data={"name":"abc"+str(e),
           "Age":e}
-    record_metadata = producer.send(topic_name, key=str(e).encode(),value=(data, schema))
+    record_metadata = producer.send(topic_name, key=str(e).encode('UTF-8'),value=(data, schema))
     sleep(.4)
