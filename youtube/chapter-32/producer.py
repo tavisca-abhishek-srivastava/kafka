@@ -35,13 +35,10 @@ schema_file =  open('./user.avsc', 'r')
 schema = AvroSchema(schema_file.read())
 producer = KafkaProducer(bootstrap_servers=['b-2.tfs3topg.3nd1ah.c1.kafka.us-east-1.amazonaws.com:9092'],value_serializer=serializer,partitioner=custom_partitioner)
 topic_name='consumerlagdemo'
-data1 = {
-    'name': 'Hello',
-    'Age':47 }
+#data={"name":"abc"+str(e),
+        #   "Age":e}
 for e in range(0,1000):
-    data={"number":e}
-    record_metadata = producer.send(topic_name, key=str(e).encode(),value=(data1, schema))
-    print(record_metadata.topic)
-    print(record_metadata.partition)
-    print(record_metadata.offset)
+    data={"name":"abc"+str(e),
+          "Age":e}
+    record_metadata = producer.send(topic_name, key=str(e).encode(),value=(data, schema))
     sleep(.4)
