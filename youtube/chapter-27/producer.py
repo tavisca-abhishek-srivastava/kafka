@@ -22,6 +22,5 @@ topic_name='consumerlagdemo'
 
 for e in range(0,1000):
     data={"number":e}
-    #producer.send(topic_name, key=str(e).encode(), value=data)
-    producer.send(topic_name, value=data)
+    producer.send(topic_name, key=str(e).encode(), value=data)
     sleep(.4)
